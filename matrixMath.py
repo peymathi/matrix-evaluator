@@ -23,7 +23,6 @@ def main():
         # Create the matrix object
         currentMatrix = Matrix(width, height)
 
-
         # Runs until the user enters correct input
         while True:
             
@@ -40,7 +39,7 @@ def main():
                 currentMatrix.initMatrix(values)
 
                 # Break the loop
-                break;
+                break
 
             elif userInput == "R":
 
@@ -52,7 +51,7 @@ def main():
                 currentMatrix.randomFill(start, end + 1)
 
                 # Break the loop
-                break;
+                break
                 
         # Print the initial matrix
         currentMatrix.printMatrix()
