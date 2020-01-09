@@ -1,8 +1,17 @@
 """
     Class that represents a matrix in row major form and includes methods to do things
-    to the matrix.
+    to the matrix. Matrices are of fixed size. 
 
-    Row Major: |0|1|2|3|4|5|6|7|8| 3x3 matrix Element Row: 2 Col: 3 Indice: 5
+    Row Major - 
+    Array: |0|1|2|3|4|5|6|7|8| 
+    Representing Matrix: 
+
+        |0|1|2|
+        |3|4|5|
+        |6|7|8|       
+    
+    Ex. 3x3 matrix 
+    Element Row: 2 Col: 3 Indice: 5
     Indice = ((Row - 1) * Width) + (Col - 1)
 
     P. Mathis
@@ -11,86 +20,84 @@
 
 # Math library
 import math
-
-# For random generator
 import random
 
 class Matrix:
 
-    # Integer to represent the height
-    height_ = 0
+    # Constructor that initializes the matrix size with default values of 1
+    def __init__(self, height = 1, width = 1):
 
-    # Integer to represent the width
-    width_ = 0
+        if height < 1 or width < 1:
+            raise "Height and width must be equal to or greater than 1"
 
-    # List that stores all values of the matrix in row major form
-    values_ = []
+        self.__height = height
+        self.__width = width
 
-    # Constructor that initializes the matrix size but no values
-    def __init__(self, height = None, width = None):
-
-        # Default values given in member declaration
-        if height == None:
-            pass
-        
-        else:
-            self.height_ = height
-            
-        if width == None:
-            pass
-        
-        else:
-            self.width_ = width
+        # List that stores all values of the matrix in row major form
+        self.__values = []
 
     # Method that takes a list to set the values of the matrix
     def initMatrix(self, values):
 
         # Check to make sure that the list entered is of correct size
-        if (len(values) == (self.height_ * self.width_)):
-            self.values_ = values
-
-        else:
+        if (len(values) != (self.__height * self.__width)):
             raise "List argument given is of incorrect size"
+
+        # Check to make sure that all values entered are numeric
+        for i in values:
+            if type(i) != "int" or type(i) != "float":
+                raise "Arguments in list are not all numeric"
+
+        self.__values = values
+            
 
     # Fills the matrix with random values ranging from start to end
     def randomFill(self, start, end):
-
-        # Check that height and width have been set
-        if self.height_ < 0 or self.width_ < 1:
-            raise "Must initialize height and width greater than 1"
         
         # Iterates through the length of the list setting random values
-        for i in range(0, self.height_ * self.width_):
-            self.values_.append(random.randrange(start, end))
-        
+        for i in range(0, self.__height * self.__width):
+            self.__values.append(random.randrange(start, end))
+
+    """ Getters for each of the private variables """
+    def getHeight(self):
+        return self.__height
+    
+    def getWidth(self):
+        return self.__width
+
+    def getValues(self):
+        return self.__values
+
+    height = property(fget=getHeight)
+    width = property(fget=getWidth)
+    values = property(fget=getValues)
 
     # Method to return a value within the matrix. Takes a width and height arguments
     def getValue(self, row, col):
 
         # Check to make sure the values entered are of correct size for the matrix
-        if (row > self.height_ or row < 1) or (col > self.width_ or col < 1):
+        if (row > self.__height or row < 1) or (col > self.__width or col < 1):
             raise "Height or width argument of invalid size"
 
         else:
-
             # Find the value given the height and the width
-            return self.values_[((row - 1) * self.width) + (col - 1)]
+            return self.__values[((row - 1) * self.__width) + (col - 1)]
 
     # Method to set a value within the matrix.
     def setValue(self, row, col, value):
 
         # Check to make sure the values entered are of correct size for the matrix
-        if (row > self.height_ or row < 1) or (col > self.width_ or col < 1):
+        if (row > self.__height or row < 1) or (col > self.__width or col < 1):
             raise "Height or width argument of invalid size"
 
         else:
 
             # Set the element at the given height and width to the given value
-            self.values_[((row - 1) * self.width_) + (col - 1)] = value
+            self.__values[((row - 1) * self.__width) + (col - 1)] = value
 
     # Prints the matrix in a formatted way to the console
     def printMatrix(self):
-        
+        pass
         """
             Loop through each row of the matrix and make a formatted string
             to print.
@@ -100,7 +107,7 @@ class Matrix:
         
         # Within the loop, i is the current row, and j is the current column
         # Outer loop through all of the rows of the matrix
-        for i in range(0, self.height_):
+        for i in range(0, self.__height):
 
             # String that will be printed
             matrixString = ""
@@ -109,11 +116,11 @@ class Matrix:
             matrixString += "{pipe:^3}"
 
             # Inner loop through each column of the matrix
-            for j in range(0, self.width_):
+            for j in range(0, self.__width):
 
                 # For every element in the row, add the curly braces
                 matrixString += "{element :^3}"
-                matrixString.format(element = self.values_[((i - 1) * self.width)) + (j - 1)], pipe = "|")
+                matrixString.format(element = self.__values[((i - 1) * self.__width) + (j - 1)], pipe = "|")
                 
             # Add the curly braces for the last pipe character
             matrixString += "{pipe:^3}"
