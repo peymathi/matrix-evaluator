@@ -21,6 +21,7 @@
 # Math library
 import math
 import random
+import numbers
 
 class Matrix:
 
@@ -45,7 +46,7 @@ class Matrix:
 
         # Check to make sure that all values entered are numeric
         for i in values:
-            if type(i) != "int" or type(i) != "float":
+            if not isinstance(i, numbers.Number):
                 raise "Arguments in list are not all numeric"
 
         self.__values = values
@@ -97,35 +98,28 @@ class Matrix:
 
     # Prints the matrix in a formatted way to the console
     def printMatrix(self):
-        pass
-        """
-            Loop through each row of the matrix and make a formatted string
-            to print.
-
-            For each row, add {:^1} to the string for each element in the row
-        """
         
-        # Within the loop, i is the current row, and j is the current column
-        # Outer loop through all of the rows of the matrix
-        for i in range(0, self.__height):
+        if self.__values == []:
+            print("Empty matrix. Nothing to print.")
+            return
 
-            # String that will be printed
-            matrixString = ""
+        # format string to print at the end
+        formatted = ""
 
-            # Add the first pipe character curly braces
-            matrixString += "{pipe:^3}"
+        # Each row
+        for i in range(self.__height):
 
-            # Inner loop through each column of the matrix
-            for j in range(0, self.__width):
+            # Each column
+            for j in range(self.__width):
 
-                # For every element in the row, add the curly braces
-                matrixString += "{element :^3}"
-                matrixString.format(element = self.__values[((i - 1) * self.__width) + (j - 1)], pipe = "|")
+                # Check if we are at the end of the row
+                if j == self.__width - 1:
+                    formatted += "|{}|\n".format(self.__values[j + (self.__width * i)])
+
+                else:
+                    formatted += "|{}".format(self.__values[j + (self.__width * i)])
                 
-            # Add the curly braces for the last pipe character
-            matrixString += "{pipe:^3}"
-
-            # Print this row
+        print(formatted)
 
 
     # Reduces the matrix to row-echelon form
@@ -143,3 +137,15 @@ class Matrix:
     def getDeterminant(self):
         pass
     
+def main():
+    matrix = Matrix(3, 3)
+    values = [
+        30, 4, 3,
+        5, 300, 2, 
+        -17.5, 9, 10]
+
+    matrix.initMatrix(values)
+    matrix.printMatrix()
+
+if __name__ == "__main__":
+    main()
