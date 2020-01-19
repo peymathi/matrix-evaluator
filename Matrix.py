@@ -61,14 +61,13 @@ class Matrix:
         self.__values = values
 
         # Set up 2d array
-        # Loop through each row in the array
-        for i in range(self.__height):
-            newRow = []
-            # Loop through each item in that row
-            for j in range(1, self.__width):
-                newRow.append(self.__values[i * self.__height])
+        row = []
+        for i in range(len(self.__values)):
 
-            self.__values_2d.append(newRow)
+            row.append(self.__values[i])
+            if (i + 1) % self.__width == 0:
+                self.__values_2d.append(row)
+                row = []
 
     # Fills the matrix with random values ranging from start to end
     def randomFill(self, start, end):
@@ -152,7 +151,6 @@ class Matrix:
 
     # Takes the second matrix and subtracts the two
     def __sub__(self, secondMatrix):
-        pass
 
         # Check that the matrix sizes are correct
         if self.__width != secondMatrix.__width or self.__height != secondMatrix.__height:
@@ -166,7 +164,6 @@ class Matrix:
 
     # Takes the second matrix and adds the two
     def __add__(self, secondMatrix):
-        pass
 
         # Check that the matrix sizes are correct
         if self.__width != secondMatrix.__width or self.__height != secondMatrix.__height:
@@ -180,8 +177,7 @@ class Matrix:
 
     # Takes a second matrix and multiplies the two. Creates and returns a product matrix object
     def __mul__(self, secondMatrix):
-        pass
-
+        
         # Check to make sure that the two matrices are multiplyable
         if self.__width != secondMatrix.__height:
             raise "Bad matrix dimensions"
@@ -219,9 +215,12 @@ def main():
     nextMatrix.randomFill(1, 4)
     matrix.printMatrix()
     nextMatrix.printMatrix()
+    m2d = matrix.getValues2d()
+    n2d = nextMatrix.getValues2d()
 
-    #result = matrix * nextMatrix
-    #print(result)
+    result = matrix * nextMatrix
+    
+
 
 if __name__ == "__main__":
     main()
