@@ -14,6 +14,12 @@
     Element Row: 2 Col: 3 Indice: 5
     Indice = ((Row - 1) * Width) + (Col - 1)
 
+    2D Array -
+
+    array[row][col]
+
+    All methods return lists in row major form
+
     P. Mathis
     Created 2/24/19
 """
@@ -37,6 +43,9 @@ class Matrix:
         # List that stores all values of the matrix in row major form
         self.__values = []
 
+        # List that stores all values of the matrix in 2d array form
+        self.__values_2d = []
+
     # Method that takes a list to set the values of the matrix
     def initMatrix(self, values):
 
@@ -50,7 +59,16 @@ class Matrix:
                 raise "Arguments in list are not all numeric"
 
         self.__values = values
-            
+
+        # Set up 2d array
+        # Loop through each row in the array
+        for i in range(self.__height):
+            newRow = []
+            # Loop through each item in that row
+            for j in range(1, self.__width):
+                newRow.append(self.__values[i * self.__height])
+
+            self.__values_2d.append(newRow)
 
     # Fills the matrix with random values ranging from start to end
     def randomFill(self, start, end):
@@ -58,6 +76,8 @@ class Matrix:
         # Iterates through the length of the list setting random values
         for i in range(0, self.__height * self.__width):
             self.__values.append(random.randrange(start, end))
+
+        self.initMatrix(self.__values)
 
     """ Getters for each of the private variables """
     def getHeight(self):
@@ -69,9 +89,13 @@ class Matrix:
     def getValues(self):
         return self.__values
 
+    def getValues2d(self):
+        return self.__values_2d
+
     height = property(fget=getHeight)
     width = property(fget=getWidth)
     values = property(fget=getValues)
+    values2d = property(fget=getValues)
 
     # Method to return a value within the matrix. Takes a width and height arguments
     def getValue(self, row, col):
@@ -126,12 +150,58 @@ class Matrix:
     def reduceMatrix(self):
         pass
 
+    # Takes the second matrix and subtracts the two
+    def __sub__(self, secondMatrix):
+        pass
+
+        # Check that the matrix sizes are correct
+        if self.__width != secondMatrix.__width or self.__height != secondMatrix.__height:
+            raise "Bad matrix dimensions"
+
+        newMatrix = []
+        for i in range(len(self.__values)):
+            newMatrix.append(self.__values[i] - secondMatrix.__values[i])
+
+        return newMatrix
+
+    # Takes the second matrix and adds the two
+    def __add__(self, secondMatrix):
+        pass
+
+        # Check that the matrix sizes are correct
+        if self.__width != secondMatrix.__width or self.__height != secondMatrix.__height:
+            raise "Bad matrix dimensions"
+
+        newMatrix = []
+        for i in range(len(self.__values)):
+            newMatrix.append(self.__values[i] + secondMatrix.__values[i])
+
+        return newMatrix
+
     # Takes a second matrix and multiplies the two. Creates and returns a product matrix object
-    def multiplyMatrices(self, secondMatrix):
+    def __mul__(self, secondMatrix):
         pass
 
         # Check to make sure that the two matrices are multiplyable
-        
+        if self.__width != secondMatrix.__height:
+            raise "Bad matrix dimensions"
+
+        newMatrix = []
+        # Loop through each row of the first matrix
+        for row in range(self.__height):
+
+            # Loop through each column of the second matrix
+            for col in range(secondMatrix.__width):
+
+                # Multiply each value in the current row with each value in the current column
+                nextSum = 0
+                # Loop through the row
+                for i in range(self.__width):
+                    nextSum += self.__values_2d[row][i] * secondMatrix.__values_2d[i][col]
+
+                newMatrix.append(nextSum)
+
+        return newMatrix
 
     # Finds the determinant of the matrix
     def getDeterminant(self):
@@ -145,7 +215,13 @@ def main():
         -17.5, 9, 10]
 
     matrix.initMatrix(values)
+    nextMatrix = Matrix(3,6)
+    nextMatrix.randomFill(1, 4)
     matrix.printMatrix()
+    nextMatrix.printMatrix()
+
+    #result = matrix * nextMatrix
+    #print(result)
 
 if __name__ == "__main__":
     main()
