@@ -32,19 +32,32 @@ import numbers
 class Matrix:
 
     # Constructor that initializes the matrix size with default values of 1
-    def __init__(self, height = 1, width = 1):
+    def __init__(self, height = 1, width = 1, listM = None):
 
         if height < 1 or width < 1:
             raise "Height and width must be equal to or greater than 1"
+        
+        if listM != None:
+            if len(listM) != height * width:
+                raise "Height or width incorrect for given list matrix"
 
+            self.__values = listM
+            
+            for i in range(len(self.__values)):
+
+                row.append(self.__values[i])
+                if (i + 1) % self.__width == 0:
+                    self.__values_2d.append(row)
+                    row = []
+
+        else:
+            self.__values = []
+            self.__values_2d = []
+        
         self.__height = height
         self.__width = width
 
-        # List that stores all values of the matrix in row major form
-        self.__values = []
 
-        # List that stores all values of the matrix in 2d array form
-        self.__values_2d = []
 
     # Method that takes a list to set the values of the matrix
     def initMatrix(self, values):
@@ -173,6 +186,7 @@ class Matrix:
         for i in range(len(self.__values)):
             newMatrix.append(self.__values[i] + secondMatrix.__values[i])
 
+        newMatrix = Matrix(self.__height, self.__width, self.__newMatrix)
         return newMatrix
 
     # Takes a second matrix and multiplies the two. Creates and returns a product matrix object
@@ -220,7 +234,5 @@ def main():
 
     result = matrix * nextMatrix
     
-
-
 if __name__ == "__main__":
     main()
