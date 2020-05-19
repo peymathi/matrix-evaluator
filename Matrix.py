@@ -18,10 +18,10 @@
 
     array[row][col]
 
-    All methods return lists in row major form
+    All computing methods return new Matrix objects.
 
     P. Mathis
-    Created 2/24/19
+    Started 2/24/19
 """
 
 # Math library
@@ -42,11 +42,12 @@ class Matrix:
                 raise "Height or width incorrect for given list matrix"
 
             self.__values = listM
-            
+            self.__values_2d = []
+            row = []
             for i in range(len(self.__values)):
 
                 row.append(self.__values[i])
-                if (i + 1) % self.__width == 0:
+                if (i + 1) % width == 0:
                     self.__values_2d.append(row)
                     row = []
 
@@ -173,7 +174,8 @@ class Matrix:
         for i in range(len(self.__values)):
             newMatrix.append(self.__values[i] - secondMatrix.__values[i])
 
-        return newMatrix
+        matrixObj = Matrix(self.__height, self.__width, newMatrix)
+        return matrixObj
 
     # Takes the second matrix and adds the two
     def __add__(self, secondMatrix):
@@ -186,7 +188,7 @@ class Matrix:
         for i in range(len(self.__values)):
             newMatrix.append(self.__values[i] + secondMatrix.__values[i])
 
-        newMatrix = Matrix(self.__height, self.__width, self.__newMatrix)
+        newMatrix = Matrix(self.__height, self.__width, newMatrix)
         return newMatrix
 
     # Takes a second matrix and multiplies the two. Creates and returns a product matrix object
@@ -211,28 +213,47 @@ class Matrix:
 
                 newMatrix.append(nextSum)
 
-        return newMatrix
+        matrixObj = Matrix(self.__height, secondMatrix.width, newMatrix)
+        return matrixObj
 
     # Finds the determinant of the matrix
     def getDeterminant(self):
         pass
     
 def main():
-    matrix = Matrix(3, 3)
-    values = [
-        30, 4, 3,
-        5, 300, 2, 
-        -17.5, 9, 10]
-
-    matrix.initMatrix(values)
-    nextMatrix = Matrix(3,6)
+    matrix = Matrix(2, 2)
+    nextMatrix = Matrix(2,2)
+    matrix.randomFill(1, 4)
     nextMatrix.randomFill(1, 4)
+
+    # Printing Unit Tests
     matrix.printMatrix()
     nextMatrix.printMatrix()
+
     m2d = matrix.getValues2d()
     n2d = nextMatrix.getValues2d()
 
+    # for i in m2d:
+    #     for j in i:
+    #         print(f"|{j}|", end = "")
+    #     print()
+    # print()
+    # print()
+
+    # for i in n2d:
+    #     for j in i:
+    #         print(f"|{j}|", end="")
+    #     print()
+
+    # print()
+
     result = matrix * nextMatrix
+    print()
+    result2d = result.getValues2d()
+    for i in result2d:
+        for j in i:
+            print(f"|{j}|", end="")
+        print()
     
 if __name__ == "__main__":
     main()
